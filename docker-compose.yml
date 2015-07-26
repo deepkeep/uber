@@ -12,3 +12,11 @@ wwwpostgres:
   environment:
     POSTGRES_USER: 'deepkeep'
     POSTGRES_PASSWORD: 'deepkeep'
+dockerregistry:
+  image: registry:2
+  ports:
+    - "5000:5000"
+  links:
+    - www
+  environment:
+    REGISTRY_NOTIFICATIONS_ENDPOINTS: [{ name: 'deepkeep-www', url: 'http://www:8095/private/api/v1/dockerevents' }]
