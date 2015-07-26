@@ -1,10 +1,11 @@
 www:
-  build: ./www/.
+  build: ./www
   ports:
     - "8095:8095"
-  env_file: ./www/.env
+  env_file: auth0.env
   environment:
     DATABASE_URL: 'postgres://deepkeep:deepkeep@wwwpostgres:5432/deepkeep'
+    PORT: 8095
   links:
     - wwwpostgres
 wwwpostgres:
@@ -20,3 +21,12 @@ dockerregistry:
     - www
   environment:
     REGISTRY_NOTIFICATIONS_ENDPOINTS: [{ name: 'deepkeep-www', url: 'http://www:8095/private/api/v1/dockerevents' }]
+packagerepository:
+  build: ./package-repository
+  ports:
+    - "8096:8096"
+  links:
+    - www
+  env_file: auth0.env
+  environment:
+    WEBHOOK_URL: http://www:8095/private/api/v1/packagesevent
