@@ -1,0 +1,14 @@
+www:
+  build: ./www/.
+  ports:
+    - "8095:8095"
+  env_file: ./www/.env
+  environment:
+    DATABASE_URL: 'postgres://deepkeep:deepkeep@wwwpostgres:5432/deepkeep'
+  links:
+    - wwwpostgres
+wwwpostgres:
+  image: postgres
+  environment:
+    POSTGRES_USER: 'deepkeep'
+    POSTGRES_PASSWORD: 'deepkeep'
