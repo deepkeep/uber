@@ -9,13 +9,17 @@ www:
     PUBLIC_PACKAGE_REPOSITORY_HOST: 192.168.59.103:6096
     INTERNAL_HOST: www
     VALIDATOR_HOST: validator
+    ELASTICSEARCH_HOST: wwwelasticsearch:9200
   links:
     - wwwpostgres
+    - wwwelasticsearch
 wwwpostgres:
   image: postgres
   environment:
     POSTGRES_USER: 'deepkeep'
     POSTGRES_PASSWORD: 'deepkeep'
+wwwelasticsearch:
+  image: elasticsearch
 docker:
   image: registry:2
   ports:
