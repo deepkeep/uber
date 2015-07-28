@@ -1,10 +1,14 @@
 www:
-  build: ./www/.
+  build: ./www
   ports:
     - "8095:8095"
-  env_file: ./www/.env
+  env_file: auth0.env
   environment:
     DATABASE_URL: 'postgres://deepkeep:deepkeep@wwwpostgres:5432/deepkeep'
+    PORT: 8095
+    PUBLIC_PACKAGE_REPOSITORY_HOST: 192.168.59.103:6096
+    INTERNAL_HOST: www
+    VALIDATOR_HOST: validator
   links:
     - wwwpostgres
 wwwpostgres:
@@ -12,7 +16,7 @@ wwwpostgres:
   environment:
     POSTGRES_USER: 'deepkeep'
     POSTGRES_PASSWORD: 'deepkeep'
-dockerregistry:
+docker:
   image: registry:2
   ports:
     - "5000:5000"
@@ -20,3 +24,25 @@ dockerregistry:
     - www
   environment:
     REGISTRY_NOTIFICATIONS_ENDPOINTS: [{ name: 'deepkeep-www', url: 'http://www:8095/private/api/v1/dockerevents' }]
+packages:
+  build: ./package-repository
+  ports:
+    - "6096:6096"
+  links:
+    - www
+    - packagess3
+  env_file: auth0.env
+  environment:
+    WEBHOOK_URL: http://www:8095/private/api/v1/packagesevent
+    PORT: 6096
+    AWS_ACCESS_KEY: fake
+    AWS_SECRET_KEY: fake
+    S3_BUCKET: packages
+    S3_ENDPOINT: http://packagess3:4569
+    AUTO_CREATE_BUCKET: true
+    FORCE_PATH_STYLE: true
+packagess3:
+  image: lphoward/fake-s3
+  ports:
+    - "4569:4569"
+  command: -r /fakes3_root -p 4569 -H packagess3
