@@ -7,6 +7,8 @@ www:
     DATABASE_URL: 'postgres://deepkeep:deepkeep@wwwpostgres:5432/deepkeep'
     PORT: 8095
     PUBLIC_PACKAGE_REPOSITORY_HOST: 192.168.59.103:6096
+    INTERNAL_HOST: www
+    VALIDATOR_HOST: validator
   links:
     - wwwpostgres
 wwwpostgres:
