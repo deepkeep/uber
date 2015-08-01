@@ -13,6 +13,7 @@ www:
   links:
     - wwwpostgres
     - wwwelasticsearch
+    - packagess3
 wwwpostgres:
   image: postgres
   environment:
